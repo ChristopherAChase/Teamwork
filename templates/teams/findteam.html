@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Team{% endblock %}
+
+{% block header %}
+    <h1>
+        Search for a team:
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <div class="search-container">
+        <form method="post">
+            <input type="text" name="search" id="search" placeholder="Search for name of team or the team's owner...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+{% endblock %}
