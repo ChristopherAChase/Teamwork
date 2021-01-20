@@ -1,0 +1,32 @@
+{% block title %}{{ g.user['UserName'] }} Get New Teams{% endblock %}
+
+{% block header %}
+    <h1>
+        It appears you are not a part of any teams yet. Don't worry, everyone starts out a loser.
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        How do you want to go about being a part of your first team? 
+    </h2>
+
+    <div class="newteam_container">
+        <a href="{{url_for('teams.createteam')}}">
+            <div class="newteam_card">
+                <p>Create your own team!</p>
+            </div>
+        </a>
+        
+        <div class="newteam_card_mediator">
+            <p>OR</p>
+        </div>
+
+        <a href="{{url_for('teams.findteam')}}">
+            <div class="newteam_card">
+                <p>Join someone else's team!</p>
+            </div>
+        </a>
+    </div>
+{% endblock %}
+

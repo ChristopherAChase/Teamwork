@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ g.user['UserName'] }} - Dashboard{% endblock %}
+
+
+{% block content %}
+    <h2>
+        {{g.user['UserName']}}
+    </h2>
+    <ul>
+        {% for element in g.user %}
+            <li>
+                {{ element|e }}
+            </li>
+        {% endfor %}
+
+        <li>G.user type
+            <ul>
+                <li>{{g.user}}</li>
+            </ul>
+        </li>
+    </ul>
+{% endblock %}
+
