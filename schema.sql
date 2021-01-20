@@ -1,6 +1,3 @@
-SELECT * FROM Users;
-
-
 CREATE TABLE Users(
     UserID      INTEGER         PRIMARY KEY AUTOINCREMENT,
     UserName    TEXT    UNIQUE  NOT NULL,
