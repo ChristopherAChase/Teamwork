@@ -3,24 +3,24 @@
 {% block title %}{{ g.user['UserName'] }}Add Team{% endblock %}
 
 {% block header %}
-    <h1>
-        Create a New Team
-    </h1>
+<h1>
+  Create a New Team
+</h1>
 {% endblock %}
 
 {% block content %}
-    <form method="post" class="form-inline">
-        <div class="form-group in">
-          <label for="teamName">Team Name:</label>
-          <input type="text" name="teamName" id="teamName" class="form-control" placeholder="Team Name">
-        </div>
-        <div class="form-group">
-          <label for="description">Short Description:</label>
-          <textarea class="form-control" name="description" id="description" rows="3" placeholder="Enter a short description of your team (optional)"></textarea>
-        </div>
+<form method="post" class="form-inline">
+  <div class="form-group in">
+    <label for="teamName">Team Name:</label>
+    <input type="text" name="teamName" id="teamName" class="form-control" placeholder="Team Name" required>
+  </div>
+  <div class="form-group">
+    <label for="description">Short Description:</label>
+    <textarea class="form-control" name="description" id="description" rows="3"
+              placeholder="Enter a short description of your team (optional)"></textarea>
+  </div>
 
-        <button type="submit" class="btn btn-outline-primary">Create Team</button>
+  <button type="submit" class="btn btn-outline-primary">Create Team</button>
 
-    </form>
+</form>
 {% endblock %}
-

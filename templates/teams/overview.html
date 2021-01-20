@@ -4,21 +4,21 @@
 
 
 {% block content %}
-    <h2>
-        {{g.user['UserName']}}
-    </h2>
-    <ul>
-        {% for element in g.user %}
-            <li>
-                {{ element|e }}
+<h2>
+    {{g.user['UserName']}}
+</h2>
+<ul>
+    <li>Teams: {{teams}}</li>
+    {% for team in teams %}
+    <li>Team Name: {{ team['Name'] }}
+        <ul>
+            <li>Description: {{team['Description']}}</li>
+            <li>Team Owner: {{team['Username']}}
             </li>
-        {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
 
-        <li>G.user type
-            <ul>
-                <li>{{g.user}}</li>
-            </ul>
-        </li>
-    </ul>
+
+</ul>
 {% endblock %}
-

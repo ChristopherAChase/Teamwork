@@ -4,7 +4,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from teamwork.db import get_db
+from Teamwork.db import get_db
 
 import functools
 

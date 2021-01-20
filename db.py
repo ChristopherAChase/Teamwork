@@ -14,7 +14,7 @@ def get_db():
         # returns query results as named tuples instead of tuples, allowing indexing by number or name
         g.db.row_factory = sqlite3.Row
 
-        return g.db
+    return g.db
 
 
 def close_db(e=None):

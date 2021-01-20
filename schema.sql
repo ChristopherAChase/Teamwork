@@ -1,3 +1,6 @@
+SELECT * FROM Users;
+
+
 CREATE TABLE Users(
     UserID      INTEGER         PRIMARY KEY AUTOINCREMENT,
     UserName    TEXT    UNIQUE  NOT NULL,
@@ -12,7 +15,7 @@ CREATE TABLE Teams (
     Name        TEXT        NOT NULL,
     OwnerID     INTEGER     NOT NULL,
     CreatedOn   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Description TEXT        NOT NULL DEFAULT 'New Team', 
+    Description TEXT        NOT NULL DEFAULT 'New Team',
     UNIQUE(Name, OwnerID),
     FOREIGN KEY (OwnerID) REFERENCES Users (UserID)
 );

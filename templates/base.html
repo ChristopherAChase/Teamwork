@@ -1,49 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {% block title %}{% endblock %} - Teamwork
-    </title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-</head>
-<body>
-    <nav>
-        <h1>Teamwork</h1>
-        <ul>
-            {% if g.user %}
-            <li>
-                <span>{{ g.user['username'] }}</span>
-            </li>
-            <li>
-                <a href="{{ url_for('auth.logout') }}">Log out</a>
-            </li>
-            {% else %}
-            <li>
-                <a href="{{ url_for('auth.register') }}">register</a>
-            </li>
-            <li>
-                <a href="{{ url_for('auth.login') }}">Log In</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    <section class="content">
-        <header>
-            {% block header %}{% endblock %}
-        </header>
-        {% for message in get_flashed_messages() %}
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}{% endblock %} - Teamwork
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </head>
+
+    <body>
+        <nav>
+            <h1>Teamwork</h1>
+            <ul>
+                {% if g.user %}
+                <li>
+                    <a href="{{url_for('teams.overview')}}">{{ g.user['username'] }}</a>
+                </li>
+                <li>
+                    <a href="{{url_for('teams.createteam')}}">Create New Team</a>
+                </li>
+                <li>
+                    <a href="{{url_for('teams.findteam')}}">Search For Team</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}">Log out</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ url_for('auth.register') }}">register</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.login') }}">Log In</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <section class="content">
+            <header>
+                {% block header %}{% endblock %}
+            </header>
+            {% for message in get_flashed_messages() %}
             <div class="flash">
                 {{ message }}
             </div>
-        {% endfor %}
-        {% block content %}{% endblock %}
-        
-        
-    </section>
-    
-</body>
+            {% endfor %}
+            {% block content %}{% endblock %}
+
+
+        </section>
+
+    </body>
+
 </html>
