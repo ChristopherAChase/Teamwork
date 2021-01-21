@@ -6,6 +6,7 @@ from werkzeug.exceptions import abort
 
 from Teamwork.auth import login_required
 from Teamwork.db import get_db
+from Teamwork.queries import queries as q
 
 bp = Blueprint('teams', __name__, url_prefix='/teams')
 
@@ -14,20 +15,11 @@ bp = Blueprint('teams', __name__, url_prefix='/teams')
 @bp.route('/overview', methods=('GET', 'POST',))
 def overview():
     if request.method == 'GET':
-        # if session.get('UserID') is None:
+        
         if g.user is None:
             return redirect(url_for('auth.login'))
 
-        get_teams = '''SELECT
-                Teams.Name,
-                Teams.Description,
-                Users.Username
-            FROM Teams
-            INNER JOIN UserTeams ON Teams.TeamID = UserTeams.TeamID
-            INNER JOIN Users ON Users.UserID = Teams.OwnerID
-            WHERE UserTeams.UserID = ?'''
-
-        teams = get_db().execute(get_teams, (g.user['UserID'],)).fetchall()
+        teams = get_db().execute(q.get_users_teams_userID, (g.user['UserID'],)).fetchall()
 
         if teams == []:
             return redirect(url_for('.noteams'))
@@ -56,10 +48,7 @@ def createteam():
         teamcheck = None
 
         if not teamname == '':
-            teamcheck = db.execute(
-                'SELECT * FROM Teams WHERE Name = ? AND OwnerID = ?', (
-                    teamname, g.user['UserID'],)
-            ).fetchone()
+            teamcheck = db.execute(q.check_teams, (teamname, userID,)).fetchone()
         else:
             error = 'The team name cannot be only whitespaces'
 
@@ -69,15 +58,13 @@ def createteam():
         if error is None:
             cur = db.cursor()
 
-            cur.execute('INSERT INTO Teams (Name, OwnerID, Description) VALUES(?,?,?)',
-                        (teamname, userID, description, ))
+            cur.execute(q.add_team, (teamname, userID, description,))
 
             db.commit()
 
             new_teamID = cur.lastrowid
 
-            cur.execute(
-                'INSERT INTO UserTeams (UserID, TeamID) VALUES(?,?)', (userID, new_teamID,))
+            cur.execute(q.add_userTeam, (userID, new_teamID,))
 
             cur.close()
             db.commit()
@@ -100,6 +87,4 @@ def load_logged_in_user():
     if userID is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM Users WHERE UserID = ?', (userID,)
-        ).fetchone()
+        g.user = get_db().execute(q.get_user_userID, (userID,)).fetchone()

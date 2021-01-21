@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 import os
 
 
@@ -27,6 +27,6 @@ def create_app(test_config=None):
 
     @app.route('/')
     def hello():
-        return render_template('base.html')
+        return redirect(url_for('teams.overview'))
 
     return app
