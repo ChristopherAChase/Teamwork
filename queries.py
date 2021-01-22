@@ -15,6 +15,17 @@ class queries:
 
     get_user_email = 'SELECT * FROM Users WHERE Email = ?'
 
+    get_teams_search = '''
+        SELECT
+            Teams.Name,
+            Teams.Description,
+            Users.Username
+        FROM Teams
+        INNER JOIN Users ON Users.UserID = Teams.OwnerID
+        WHERE Users.UserName LIKE ?
+        OR Teams.Name LIKE ?
+        '''
+
     check_teams = 'SELECT * FROM Teams WHERE Name = ? and OwnerID = ?'
 
     add_user = '''

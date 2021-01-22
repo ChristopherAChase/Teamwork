@@ -15,4 +15,14 @@
             <button type="submit"><i class="fa fa-search"></i></button>
         </form>
     </div>
+
+    {% for team in teams %}
+    <li>Team Name: {{ team['Name'] }}
+        <ul>
+            <li>Description: {{team['Description']}}</li>
+            <li>Team Owner: {{team['Username']}}
+            </li>
+        </ul>
+    </li>
+    {% endfor %}
 {% endblock %}

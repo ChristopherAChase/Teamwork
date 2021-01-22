@@ -15,11 +15,12 @@ bp = Blueprint('teams', __name__, url_prefix='/teams')
 @bp.route('/overview', methods=('GET', 'POST',))
 def overview():
     if request.method == 'GET':
-        
+
         if g.user is None:
             return redirect(url_for('auth.login'))
 
-        teams = get_db().execute(q.get_users_teams_userID, (g.user['UserID'],)).fetchall()
+        teams = get_db().execute(q.get_users_teams_userID,
+                                 (g.user['UserID'],)).fetchall()
 
         if teams == []:
             return redirect(url_for('.noteams'))
@@ -48,7 +49,8 @@ def createteam():
         teamcheck = None
 
         if not teamname == '':
-            teamcheck = db.execute(q.check_teams, (teamname, userID,)).fetchone()
+            teamcheck = db.execute(
+                q.check_teams, (teamname, userID,)).fetchone()
         else:
             error = 'The team name cannot be only whitespaces'
 
@@ -77,7 +79,21 @@ def createteam():
 
 @bp.route('/findteam', methods=('GET', 'POST',))
 def findteam():
-    return render_template('teams/findteam.html')
+    if request.method == 'GET':
+        return render_template('teams/findteam.html')
+    elif request.method == 'POST':
+        search = request.form['search']
+        error = None
+        db = get_db()
+
+        teams = db.execute(q.get_teams_search,
+                           ('%'+search+'%', '%'+search+'%',)).fetchall()
+
+        if teams == []:
+            error = 'There were no teams with a name or owner similar to your search terms'
+            flash(error)
+
+        return render_template('teams/findteam.html', teams=teams)
 
 
 @bp.before_app_request
