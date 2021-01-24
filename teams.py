@@ -2,8 +2,6 @@ from flask import (
     Blueprint, flash, g, redirect, render_template,
     request, session, url_for
 )
-from werkzeug.exceptions import abort
-
 from Teamwork.auth import login_required
 from Teamwork.db import get_db
 from Teamwork.queries import queries as q
@@ -94,6 +92,29 @@ def findteam():
             flash(error)
 
         return render_template('teams/findteam.html', teams=teams)
+
+
+@bp.route('/joinTeam/<int:teamID>', methods=('GET', 'POST',))
+def jointeam(teamID):
+    db = get_db()
+    db.execute(q.add_userTeam, (g.user['UserID'], teamID,))
+    db.commit()
+    return redirect(url_for('teams.team', teamID=teamID))
+
+
+@bp.route('<int:teamID>', methods=('GET', 'POST'))
+def team(teamID):
+    team = get_db().execute(q.get_team_info, (teamID,)).fetchone()
+    teamMembers = get_db().execute(q.get_team_members_teamID, (teamID,)).fetchall()
+    projects = get_db().execute(q.get_projects_teamID, (teamID,)).fetchall()
+    user_on_team = get_db().execute(q.check_user_on_team,
+                                    (g.user['UserID'], teamID,)).fetchone()[0]
+
+    return render_template('teams/team.html',
+                           team=team,
+                           teamMembers=teamMembers,
+                           projects=projects,
+                           user_on_team=user_on_team)
 
 
 @bp.before_app_request

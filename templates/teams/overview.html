@@ -8,15 +8,17 @@
     {{g.user['UserName']}}
 </h2>
 <ul>
-    <li>Teams: {{teams}}</li>
     {% for team in teams %}
-    <li>Team Name: {{ team['Name'] }}
-        <ul>
-            <li>Description: {{team['Description']}}</li>
-            <li>Team Owner: {{team['Username']}}
+        <div class="team-card">
+           
+            <li><a href="{{url_for('teams.team', teamID=team['TeamID'])}}">Team Name: {{ team['Name'] }}</a> 
+                <ul>
+                    <li>Description: {{team['Description']}}</li>
+                    <li>Team Owner: {{team['Username']}}
+                    </li>
+                </ul>
             </li>
-        </ul>
-    </li>
+        </div>
     {% endfor %}
 
 

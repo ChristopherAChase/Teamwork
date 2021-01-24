@@ -1,6 +1,7 @@
 class queries:
     get_users_teams_userID = '''
         SELECT
+            Teams.TeamID,
             Teams.Name,
             Teams.Description,
             Users.Username
@@ -15,8 +16,44 @@ class queries:
 
     get_user_email = 'SELECT * FROM Users WHERE Email = ?'
 
+    get_team_info = '''
+        SELECT
+            Teams.TeamID,
+            Teams.Name,
+            Teams.Description
+        FROM Teams
+        WHERE Teams.TeamID = ?
+        '''
+
+    get_team_members_teamID = '''
+        SELECT
+            Users.Username,
+            Users.FirstName,
+            Users.LastName,
+            Users.Email,
+            CASE
+                WHEN Users.UserID = Teams.OwnerID THEN 1
+                ELSE 0
+            END AS IsOwner
+        FROM Teams
+        INNER JOIN UserTeams ON UserTeams.TeamID = Teams.TeamID
+        INNER JOIN Users ON Users.UserID = userTeams.UserID
+        WHERE Teams.TeamID = ?
+        ORDER BY IsOwner DESC
+        '''
+
+    get_projects_teamID = '''
+        SELECT
+            Projects.ProjectID,
+            Projects.Project,
+            Projects.Description
+        FROM Projects
+        WHERE TeamID = ?
+        '''
+
     get_teams_search = '''
         SELECT
+            Teams.TeamID,
             Teams.Name,
             Teams.Description,
             Users.Username
@@ -27,6 +64,13 @@ class queries:
         '''
 
     check_teams = 'SELECT * FROM Teams WHERE Name = ? and OwnerID = ?'
+
+    check_user_on_team = '''
+        SELECT COUNT(*)
+        FROM UserTeams
+        WHERE UserID = ?
+            AND TeamID = ?
+        '''
 
     add_user = '''
         INSERT INTO Users

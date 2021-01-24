@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ g.user['UserName'] }} - {{team['Name']}}{% endblock %}
+
+{% block header %}
+    <h1>
+        {{team['Name']}}
+    </h1>
+
+    <p>
+        {{team['Description']}}
+    </p>
+{% endblock %}
+
+{% block content %}
+
+    <div class="teammembers" >
+        <h2>Team Members</h2>
+        {% if user_on_team == 0 %}
+            <p>
+                Want to join the team? 
+                <a href="{{url_for('teams.jointeam', teamID=team['teamID'])}}">
+                    Request Access <!-- Send an email to the owner requesting access... eventually.-->
+                </a>
+            </p>
+        {% endif %}
+
+        {% for member in teamMembers %}
+            <ul>
+                <li>{{member['UserName']}}
+                    <ul>
+                        <li>{{member['FirstName']}} {{member['LastName']}}</li>
+                        <li>{{member['Email']}}</li>
+                        {% if member['IsOwner'] == 1 %}
+                            <li>Team Leader</li>
+                        {% endif %}
+                        
+                    </ul>
+
+                </li>
+            </ul>
+        {% endfor %}
+    </div>
+
+    <div class="projects">
+        <h2>Projects</h2>
+        <a href="#">Create a new project</a>
+        {% for project in projects %}
+            <ul>
+                <li>{{project['Name']}}
+                    <ul>
+                        <li>{{project['Description']}}</li>
+                    </ul>
+
+                </li>
+            </ul>
+        {% endfor %}
+        
+    </div>
+    
+
+{% endblock %}
