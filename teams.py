@@ -91,7 +91,7 @@ def findteam():
             error = 'There were no teams with a name or owner similar to your search terms'
             flash(error)
 
-        return render_template('teams/findteam.html', teams=teams)
+        return render_template('teams/findteam.html', teams=teams, search_term=search)
 
 
 @bp.route('/joinTeam/<int:teamID>', methods=('GET', 'POST',))
@@ -109,12 +109,15 @@ def team(teamID):
     projects = get_db().execute(q.get_projects_teamID, (teamID,)).fetchall()
     user_on_team = get_db().execute(q.check_user_on_team,
                                     (g.user['UserID'], teamID,)).fetchone()[0]
+    user_is_owner = get_db().execute('SELECT COUNT(*) FROM Teams WHERE TeamID = ? AND OwnerID = ?',
+                                     (teamID, g.user['UserID'],)).fetchone()[0]
 
     return render_template('teams/team.html',
                            team=team,
                            teamMembers=teamMembers,
                            projects=projects,
-                           user_on_team=user_on_team)
+                           user_on_team=user_on_team,
+                           user_is_owner=user_is_owner)
 
 
 @bp.before_app_request

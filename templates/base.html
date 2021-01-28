@@ -8,52 +8,79 @@
             {% block title %}{% endblock %} - Teamwork
         </title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     </head>
 
     <body>
-        <nav>
-            <h1>Teamwork</h1>
-            <ul>
-                {% if g.user %}
-                <li>
-                    <a href="{{url_for('teams.overview')}}">{{ g.user['username'] }}</a>
-                </li>
-                <li>
-                    <a href="{{url_for('teams.createteam')}}">Create New Team</a>
-                </li>
-                <li>
-                    <a href="{{url_for('teams.findteam')}}">Search For Team</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('auth.logout') }}">Log out</a>
-                </li>
-                {% else %}
-                <li>
-                    <a href="{{ url_for('auth.register') }}">register</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('auth.login') }}">Log In</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        <section class="content">
-            <header>
-                {% block header %}{% endblock %}
-            </header>
-            {% for message in get_flashed_messages() %}
-            <div class="flash">
-                {{ message }}
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand mb-0 h1" href="{{url_for('teams.overview')}}">Teamwork</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle Navigation">
+                <span class="navbar-toggler-icon"> <i class="fa fa-bars" aria-hidden="true"></i></i> </span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    
+                    <li class="nav-item active">
+                        <a class="nav-link"  href="{{url_for('teams.overview')}}">
+                            <i class="fa fa-home" aria-hidden="true"></i> Home 
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-group" aria-hidden="true"></i> Teams
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a href="{{url_for('teams.createteam')}}" class="dropdown-item">
+                                <i class="fa fa-plus-square" aria-hidden="true"></i> Create New Team
+                            </a>
+                            <a href="{{url_for('teams.findteam')}}" class="dropdown-item">
+                                <i class="fa fa-search" aria-hidden="true"></i> Search For Team
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                
+                <a href="{{ url_for('auth.logout') }}">Log out</a>
+                
             </div>
-            {% endfor %}
-            {% block content %}{% endblock %}
+        </nav>
+        <section class="content container">
+            <header >
+                <h1 class="display-2 text-center">
+                    {% block header %}{% endblock %}
+                </h1>
+                
+            </header>
+            {% block errors %}
+                {% for message in get_flashed_messages() %}
+                <div class="flash">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endblock %}
+            
+            {% block content %}
+            
+            {% endblock %}
 
 
         </section>
-
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
+                crossorigin="anonymous"></script>
     </body>
 
 </html>

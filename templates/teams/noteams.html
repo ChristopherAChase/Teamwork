@@ -5,32 +5,63 @@
 {% block title %}{{ g.user['UserName'] }}{% endblock %}
 
 {% block header %}
-    <h1>
-        It appears you are not a part of any teams yet. Don't worry, everyone starts out a loser.
-    </h1>
+    Join Your First Team
 {% endblock %}
 
 {% block content %}
-    <h2>
-        How do you want to go about being a part of your first team? 
-    </h2>
-
-    <div class="newteam_container">
-        <a href="{{url_for('teams.createteam')}}">
-            <div class="newteam_card">
-                <p>Create your own team!</p>
-            </div>
-        </a>
-        
-        <div class="newteam_card_mediator">
-            <p>OR</p>
+    <div class="row align-items-center my-4">
+        <div class="col text-center">
+            <h1 >
+                It appears you are not a part of any teams yet. 
+            </h1>
+            <h2 >
+                How do you want to go about being a part of your first team? 
+            </h2>
         </div>
+    </div>
 
-        <a href="{{url_for('teams.findteam')}}">
-            <div class="newteam_card">
-                <p>Join someone else's team!</p>
+    <div class="row mt-4">
+        <div class="col d-flex justify-content-around">
+            
+            <div class="card text-left" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Create one!</h5>
+                  
+                    <p class="card-text">
+                        If you're just getting started with teamwork to test the waters and see how it 
+                        can help you personally, or maybe you know of other teams already, but want to 
+                        start your own, this is the way to go. 
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{url_for('teams.createteam')}}" class="card-link">Start your own team</a>
+                </div>
             </div>
-        </a>
+        
+            <div class="d-flex align-items-center">
+                    <h1 class="display-1 mg-lg">
+                        OR 
+                    </h1>
+                
+            </div>
+        
+            <div class="card text-left" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Find and join one!</h5>
+                  
+                    <p class="card-text">
+                        If you signed up for Teamwork with the intentions of joining another person's team, 
+                        then this is the route for you. All you need to know is the team name and/or the team
+                        owner's name to get started! 
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{url_for('teams.findteam')}}" class="card-link ">Search for your first team</a>
+                </div>
+            </div>
+        </div>
+    
+    
     </div>
 {% endblock %}
 

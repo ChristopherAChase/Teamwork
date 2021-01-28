@@ -27,6 +27,7 @@ class queries:
 
     get_team_members_teamID = '''
         SELECT
+            Users.UserID,
             Users.Username,
             Users.FirstName,
             Users.LastName,

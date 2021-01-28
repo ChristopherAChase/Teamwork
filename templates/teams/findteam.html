@@ -2,29 +2,63 @@
 
 {% block title %}Find Team{% endblock %}
 
-{% block header %}
-    <h1>
-        Search for a team:
-    </h1>
-{% endblock %}
+{% block header %} Search for a team {% endblock %}
+
+{% block errors %}{% endblock %}
+
 
 {% block content %}
-    <div class="search-container">
-        <form method="post">
-            <input type="text" name="search" id="search" placeholder="Search for name of team or the team's owner...">
-            <button type="submit"><i class="fa fa-search"></i></button>
+        <form method="post" class="my-5" >
+            {% with error_messages = get_flashed_messages() %}
+                {% if error_messages %}
+                <div class="form-row justify-content-center">
+                    <div class="col-8 text-center">
+                        {% for error in error_messages %}
+                            <p class="text-danger">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endwith %}
+            <div class="form-row justify-content-center ">
+                <div class="col-8">
+                    <label for="search" class="sr-only">Team Search Bar</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text" role="search">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </div>
+                        <input type="search" class="form-control" name="search" id="search" value="{{search_term if search_term}}" placeholder="Search for name of team or the team's owner...">
+                    </div>
+                </div>
+            </div>
         </form>
-    </div>
+    
 
-    {% for team in teams %}
-    <div class="team-card">
-        <li><a href="{{url_for('teams.team', teamID=team['TeamID'])}}">Team Name: {{ team['Name'] }}</a> 
-            <ul>
-                <li>Description: {{team['Description']}}</li>
-                <li>Team Owner: {{team['Username']}}
-                </li>
-            </ul>
-        </li>
+    <div id="accordion">
+        {% for team in teams %}
+        <div class="card">
+            <div class="card-header" id="heading{{team['TeamID']}}" data-toggle="collapse" data-target="#collapse{{team['TeamID']}}"
+                    aria-expanded="false" aria-controls="collapse{{team['TeamID']}}">
+                <div class="d-flex justify-content-between">
+                    <h4 >{{ team['Name'] }}</h4>
+                    <p>Team Owner: {{team['Username']}}</p>
+                </div>
+            </div>
+            <div id="collapse{{team['TeamID']}}" class="collapse" aria-labelledby="heading{{team['TeamID']}}" data-parent="#accordion" >
+                <div class="card-body ">
+                    <div class="row d-flex justify-content-between">
+                        <p class="col-auto"> {{team['Description']}} </p>
+                        <a href="{{url_for('teams.team', teamID=team['TeamID'])}}" class="btn btn-outline-primary"> 
+                            Visit Team's page
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 {% endblock %}
