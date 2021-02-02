@@ -41,7 +41,8 @@ def register():
             'have an account?'
 
         if error is None:
-            db.execute(q.add_user, (username, generate_password_hash(password), email, first_name, last_name,))
+            db.execute(q.add_user, (username, generate_password_hash(
+                password), email, first_name, last_name,))
             db.commit()
 
             return redirect(url_for('auth.login'))
@@ -60,7 +61,7 @@ def login():
         password = request.form['Password']
         db = get_db()
         error = None
-        
+
         user = db.execute(q.get_user_userName, (username,)).fetchone()
 
         if user is None:
@@ -92,6 +93,8 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(q.get_user_userID, (userID,)).fetchone()
+        g.teams = get_db().execute(q.get_users_teams_userID, (userID, )).fetchall()
+
 
 def login_required(view):
     @functools.wraps(view)

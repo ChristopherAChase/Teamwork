@@ -14,6 +14,7 @@ CREATE TABLE Teams (
     CreatedOn   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     Description TEXT        NOT NULL DEFAULT 'New Team',
     UNIQUE(Name, OwnerID),
+    CHECK (not Name == ''),
     FOREIGN KEY (OwnerID) REFERENCES Users (UserID)
 );
 
@@ -23,7 +24,17 @@ CREATE TABLE Projects (
     Description TEXT        NOT NULL DEFAULT 'New project',
     CreatedOn   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     TeamID      INTEGER     NOT NULL,
-    FOREIGN KEY (TeamID) REFERENCES Teams (TeamID)
+    FOREIGN KEY (TeamID) REFERENCES Teams (TeamID),
+    UNIQUE (Project, TeamID)
+);
+
+CREATE TABLE ProjectUsers (
+    ProjectUserID   INTEGER     PRIMARY KEY AUTOINCREMENT,
+    ProjectID       INTEGER     NOT NULL,
+    UserID          INTEGER     NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users (UserID),
+    FOREIGN KEY (ProjectID) REFERENCES Projects (ProjectID),
+    UNIQUE(UserID, ProjectID)
 );
 
 CREATE TABLE Tasks (
@@ -53,7 +64,8 @@ CREATE TABLE UserTeams (
     UserID      INTEGER     NOT NULL,
     TeamID      INTEGER     NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users (UserID),
-    FOREIGN KEY (TeamID) REFERENCES Teams (TeamID)
+    FOREIGN KEY (TeamID) REFERENCES Teams (TeamID),
+    UNIQUE (UserID, TeamID)
 );
 
 

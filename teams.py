@@ -85,7 +85,7 @@ def findteam():
         db = get_db()
 
         teams = db.execute(q.get_teams_search,
-                           ('%'+search+'%', '%'+search+'%',)).fetchall()
+                           ('%' + search + '%', '%' + search + '%',)).fetchall()
 
         if teams == []:
             error = 'There were no teams with a name or owner similar to your search terms'
@@ -128,3 +128,4 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(q.get_user_userID, (userID,)).fetchone()
+        g.teams = get_db().execute(q.get_users_teams_userID, (userID, )).fetchall()

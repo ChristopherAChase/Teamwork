@@ -19,11 +19,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import db, auth, teams
+    from . import db, auth, teams, project
     db.init_app(app)
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(teams.bp)
+    app.register_blueprint(project.bp)
 
     @app.route('/')
     def hello():

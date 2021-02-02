@@ -26,7 +26,6 @@
                         </a>
                     {% endif %}
                 </p>
-                
             </div>
 
             <ul class="list-group list-group-flush">
@@ -46,7 +45,6 @@
                     </li>
                 {% endfor %}
             </ul>
-    
         </div>
         
         <div class="col-6">
@@ -54,29 +52,20 @@
                 <h2>Projects</h2>
                 <p>
                     {% if user_is_owner %}
-                        <a href="#">
+                        <a href="{{url_for('projects.create_project', teamID=team['TeamID'])}}">
                             <i class="fa fa-plus-square-o"></i> Create New Project 
                         </a>
                     {% endif %}
                 </p>
-                
             </div>
-
-            
-            
             <div id="accordion">
                 {% for project in projects %}
                 <div class="card">
                     <div class="card-header" id="heading{{project['ProjectID']}}" data-toggle="collapse" data-target="#collapse{{project['ProjectID']}}"
                     aria-expanded="false" aria-controls="collapse{{project['ProjectID']}}">
-        
-                        
-                            <h3>
-                                {{ project['Project'] }}
-                            </h3>
-                        
-        
-        
+                        <h3>
+                            {{ project['Project'] }}
+                        </h3>
                     </div>
                     <div id="collapse{{project['ProjectID']}}" class="collapse" aria-labelledby="heading{{project['ProjectID']}}" data-parent="#accordion" >
                         <div class="card-body ">
@@ -90,7 +79,6 @@
                             </div>
                         </div>
                     </div>
-        
                 </div>
                 {% endfor %}
             </div>
