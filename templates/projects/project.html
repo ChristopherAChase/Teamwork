@@ -19,7 +19,7 @@
         <a href="{{url_for('projects.edit_project', projectID=project['ProjectID'])}}" class="dropdown-item">
             <i class="fa fa-edit"></i> Edit Project
         </a>
-        <a href="{{url_for('projects.delete_project', projectID=project['ProjectID'])}}" class="dropdown-item">
+        <a href="#" data-toggle="modal" data-target="#deleteModal" class="dropdown-item">
             <i class="fa fa-trash-o" aria-hidden="true"></i> Delete Project
         </a>
     </div>
@@ -62,5 +62,5 @@
 </div>
 
 
-
+{% include 'projects/includes/delete.html' %}
 {% endblock %}

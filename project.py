@@ -17,7 +17,10 @@ def create_project(teamID):
     teamMembers = get_db().execute(q.get_team_members_teamID, (teamID,)).fetchall()
 
     if request.method == 'GET':
-        return render_template('projects/manageproject.html', action='Add', teamMembers=teamMembers, projectMembers=None)
+        return render_template('projects/manageproject.html',
+                               action='Add',
+                               teamMembers=teamMembers,
+                               projectMembers=None)
     elif request.method == 'POST':
         db = get_db()
 
