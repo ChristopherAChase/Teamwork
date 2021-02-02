@@ -1,10 +1,30 @@
 {% extends 'base.html' %}
 
-{% block title %}{{action}} Project{% endblock %}
-
-{% block header %}{{action}} Project{% endblock %}
-
-{% block content %}{% endblock %}
+{% block title %}Delete Project{% endblock %}
 
 
 
+{% block content %}
+
+<h1 class="display-3">
+    Are you sure you want to delete {{project['Project']}}?
+</h1>
+
+<form method="post">
+
+    <div class="form-row d-flex justify-content-around">
+        <input type="hidden" name="projectID" value="{{project['ProjectID']}}">
+
+        <button type="submit" class="btn btn-outline-danger">
+            Yes, Delete Project
+        </button>
+
+        <a href="{{url_for('projects.view_project', projectID=project['ProjectID'])}}" class="btn btn-outline-primary">
+            Nevermind - Bad Idea
+        </a>
+
+    </div>
+
+</form>
+
+{% endblock %}

@@ -10,81 +10,85 @@
 </p>
 
 
-    <div class="row">
-        <div class="col-6" >
-            <div class="d-flex justify-content-between">
-                <h2>Team Members</h2>
-                <p>
-                    {% if user_on_team == 0 %}
-                        Want to join the team? 
-                        <a href="{{url_for('teams.jointeam', teamID=team['teamID'])}}">
-                            Request Access <!-- Send an email to the owner requesting access... eventually.-->
-                        </a>
-                    {% elif user_is_owner %}
-                        <a href="#">
-                            <i class="fa fa-edit"></i> Manage Users 
-                        </a>
-                    {% endif %}
-                </p>
-            </div>
-
-            <ul class="list-group list-group-flush">
-                {% for member in teamMembers %}
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <p>
-                                {% if member['IsOwner'] == 1 %}
-                                    <i class="fa fa-star"></i>
-                                {% endif %}
-                                {{member['FirstName']}} {{member['LastName']}} - {{member['UserName']}}
-                            </p>
-                            <p>
-                                {{member['Email']}}
-                            </p>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+<div class="row">
+    <div class="col-6">
+        <div class="d-flex justify-content-between">
+            <h2>Team Members</h2>
+            <p>
+                {% if user_on_team == 0 %}
+                Want to join the team?
+                <a href="{{url_for('teams.jointeam', teamID=team['teamID'])}}">
+                    Request Access
+                    <!-- Send an email to the owner requesting access... eventually.-->
+                </a>
+                {% elif user_is_owner %}
+                <a href="#">
+                    <i class="fa fa-edit"></i> Manage Users
+                </a>
+                {% endif %}
+            </p>
         </div>
-        
-        <div class="col-6">
-            <div class="d-flex justify-content-between">
-                <h2>Projects</h2>
-                <p>
-                    {% if user_is_owner %}
-                        <a href="{{url_for('projects.create_project', teamID=team['TeamID'])}}">
-                            <i class="fa fa-plus-square-o"></i> Create New Project 
-                        </a>
-                    {% endif %}
-                </p>
-            </div>
-            <div id="accordion">
-                {% for project in projects %}
-                <div class="card">
-                    <div class="card-header" id="heading{{project['ProjectID']}}" data-toggle="collapse" data-target="#collapse{{project['ProjectID']}}"
-                    aria-expanded="false" aria-controls="collapse{{project['ProjectID']}}">
-                        <h3>
-                            {{ project['Project'] }}
-                        </h3>
-                    </div>
-                    <div id="collapse{{project['ProjectID']}}" class="collapse" aria-labelledby="heading{{project['ProjectID']}}" data-parent="#accordion" >
-                        <div class="card-body ">
-                            <div class="row d-flex justify-content-between">
-                                <p class="col-auto">
-                                    {{project['Description']}}
-                                </p>
-                                <a href="{{url_for('teams.team', teamID=team['TeamID'])}}" class="btn btn-outline-primary">
-                                    Visit Project Page
-                                </a>
-                            </div>
+
+        <ul class="list-group list-group-flush">
+            {% for member in teamMembers %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <p>
+                        {% if member['IsOwner'] == 1 %}
+                        <i class="fa fa-star"></i>
+                        {% endif %}
+                        {{member['FirstName']}} {{member['LastName']}} - {{member['UserName']}}
+                    </p>
+                    <p>
+                        {{member['Email']}}
+                    </p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-6">
+        <div class="d-flex justify-content-between">
+            <h2>Projects</h2>
+            <p>
+                {% if user_is_owner %}
+                <a href="{{url_for('projects.create_project', teamID=team['TeamID'])}}">
+                    <i class="fa fa-plus-square-o"></i> Create New Project
+                </a>
+                {% endif %}
+            </p>
+        </div>
+        <div id="accordion">
+            {% for project in projects %}
+            <div class="card">
+                <div class="card-header" id="heading{{project['ProjectID']}}" data-toggle="collapse"
+                     data-target="#collapse{{project['ProjectID']}}"
+                     aria-expanded="false" aria-controls="collapse{{project['ProjectID']}}">
+                    <h3>
+                        {{ project['Project'] }}
+                    </h3>
+                </div>
+                <div id="collapse{{project['ProjectID']}}" class="collapse"
+                     aria-labelledby="heading{{project['ProjectID']}}" data-parent="#accordion">
+                    <div class="card-body ">
+                        <div class="row d-flex justify-content-between">
+                            <p class="col-auto">
+                                {{project['Description']}}
+                            </p>
+                            <a href="{{url_for('projects.view_project', projectID=project['ProjectID'])}}"
+                               class="btn btn-outline-primary">
+                                Visit Project Page
+                            </a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
+</div>
 
-    
+
 
 {% endblock %}

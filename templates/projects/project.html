@@ -1,15 +1,66 @@
 {% extends 'base.html' %}
 
-{% block title %}{% endblock %}
+{% block title %}{{project['Project']}}{% endblock %}
 
-{% block header %}{% endblock %}
+{% block header %}{{project['Project']}} - Overview {% endblock %}
 
 {% block content %}
+<div class="row d-flex justify-content-between">
+    <p class="col-auto">
+        {{project['Description']}}
+    </p>
+    {% if g.user['UserID'] == project['OwnerID'] %}
 
+    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false">
+        Options
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a href="{{url_for('projects.edit_project', projectID=project['ProjectID'])}}" class="dropdown-item">
+            <i class="fa fa-edit"></i> Edit Project
+        </a>
+        <a href="{{url_for('projects.delete_project', projectID=project['ProjectID'])}}" class="dropdown-item">
+            <i class="fa fa-trash-o" aria-hidden="true"></i> Delete Project
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <h2>
+            Project Contributors
+        </h2>
+        <ul class="list-group list-group-flush">
+            {% for member in projectMembers %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>
+                    {{member['FirstName']}} {{member['LastName']}} - {{member['UserName']}}
+                </span>
+                {% if member['IsOwner'] == 1 %}
+                <i class="fa fa-star"></i>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col-6">
+        <div class="d-flex justify-content-between">
+            <h2>Project Task Items</h2>
+            <p>
+                {% if g.user['UserID'] == project['OwnerID'] %}
+                <a href="#">
+                    <i class="fa fa-plus-square-o"></i> Create New Tasks
+                </a>
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+</div>
 
 
 
 {% endblock %}
-
-
-

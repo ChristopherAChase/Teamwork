@@ -54,13 +54,31 @@ class queries:
 
     get_project_projectID = '''
         SELECT
-            Projects.ProjectID,
-            Projects.Project,
-            Projects.Description,
-            Projects.TeamID
-        FROM Projects
+            p.ProjectID,
+            p.Project,
+            p.Description,
+            p.TeamID,
+            t.OwnerID
+        FROM Projects AS p
+        INNER JOIN Teams AS t ON t.TeamID = p.TeamID
         WHERE ProjectID = ?
         '''
+
+    get_projectMemberDetails_projectID = '''
+        SELECT
+            u.UserID,
+            u.UserName,
+            u.FirstName,
+            u.LastName,
+            CASE
+                WHEN u.UserID = t.OwnerID THEN 1
+                ELSE 0
+            END as IsOwner
+        FROM ProjectUsers AS pu
+            INNER JOIN Projects AS p on p.projectID = pu.projectID
+            INNER JOIN Users as u on u.userID = pu.userID
+            INNER JOIN Teams as t ON t.TeamID = p.TeamID
+        WHERE pu.ProjectID = ?'''
 
     get_projectMembers_projectID = '''
         SELECT

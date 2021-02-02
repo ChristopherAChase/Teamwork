@@ -17,7 +17,7 @@ def create_project(teamID):
     teamMembers = get_db().execute(q.get_team_members_teamID, (teamID,)).fetchall()
 
     if request.method == 'GET':
-        return render_template('projects/manageproject.html', action='Add', teamMembers=teamMembers)
+        return render_template('projects/manageproject.html', action='Add', teamMembers=teamMembers, projectMembers=None)
     elif request.method == 'POST':
         db = get_db()
 
@@ -72,19 +72,36 @@ def edit_project(projectID):
             get_db().execute(q.add_projectUsers, (projectID, user,))
 
         db.commit()
-        return redirect(url_for('teams.team', teamID=teamID))
+        return redirect(url_for('projects.view_project', projectID=projectID))
 
 
 @login_required
 @bp.route('/deleteproject/<int:projectID>', methods=('GET', 'POST',))
-def delete_project():
-    pass
+def delete_project(projectID):
+    db = get_db()
+
+    project = db.execute(q.get_project_projectID, (projectID,)).fetchone()
+    teamID = project['TeamID']
+
+    if request.method == 'GET':
+        return render_template('projects/deleteproject.html', project=project)
+    elif request.method == 'POST':
+        db.execute(q.delete_project, (projectID,))
+        db.execute(q.clear_projectUsers, (projectID,))
+        db.commit()
+
+        return redirect(url_for('teams.team', teamID=teamID))
 
 
 @login_required
-@bp.route('/viewproject')
-def view_project():
-    pass
+@bp.route('/viewproject/<int:projectID>', methods=('GET', 'POST',))
+def view_project(projectID):
+    db = get_db()
+    project = db.execute(q.get_project_projectID, (projectID,)).fetchone()
+    projectMembers = db.execute(
+        q.get_projectMemberDetails_projectID, (projectID,)).fetchall()
+
+    return render_template('projects/project.html', project=project, projectMembers=projectMembers)
 
 
 @bp.before_app_request
