@@ -123,7 +123,7 @@ class queries:
         OR Teams.Name LIKE ?
         '''
 
-    get_project_tasks = '''SELECT * FROM Tasks WHERE ProjectID = ? ORDER BY CreatedOn DESC'''
+    get_project_tasks = '''SELECT * FROM Tasks WHERE ProjectID = ? ORDER BY CreatedOn '''
 
     check_teams = 'SELECT * FROM Teams WHERE Name = ? and OwnerID = ?'
 

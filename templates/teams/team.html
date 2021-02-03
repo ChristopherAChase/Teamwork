@@ -51,13 +51,14 @@
     <div class="col-6">
         <div class="d-flex justify-content-between">
             <h2>Projects</h2>
-            <p>
+            <h3 data-toggle="tooltip" data-placement="right" title="Create New Project">
                 {% if user_is_owner %}
+
                 <a href="{{url_for('projects.create_project', teamID=team['TeamID'])}}">
-                    <i class="fa fa-plus-square-o"></i> Create New Project
+                    <i class="fa fa-plus-square-o"></i>
                 </a>
                 {% endif %}
-            </p>
+            </h3>
         </div>
         <div id="accordion">
             {% for project in projects %}
