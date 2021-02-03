@@ -50,15 +50,51 @@
                             {% if g.teams %}
                             <div class="dropdown-divider"></div>
                             <span class="dropdown-header" disabled>Your teams</span>
-                            {% for team in g.teams %}
-                            <a href="{{url_for('teams.team', teamID=team['TeamID'])}}" class="dropdown-item">
-                                {{team['Name']}}
-                            </a>
-                            {% endfor %}
+                                {% for team in g.teams %}
+                                <a href="{{url_for('teams.team', teamID=team['TeamID'])}}" class="dropdown-item">
+                                    {{team['TeamOwner']}} - {{team['Name']}}
+                                </a>
+                                {% endfor %}
                             {% endif %}
                         </div>
-
                     </li>
+                    {% if g.ownedprojects or g.projects_involved_in %}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            >
+                                <i class="fa fa-group" aria-hidden="true"></i> Projects
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if g.ownedprojects %}
+                                    <span class="dropdown-header" disabled>Projects You Own</span>
+                                    {% for project in g.ownedprojects %}
+                                        <a href="{{url_for('projects.view_project', projectID=project['ProjectID'])}}" class="dropdown-item">
+                                            {{project['TeamName']}} - {{project['Project']}}
+                                        </a>
+                                    {% endfor %}
+                                    
+                                {% endif %}
+
+                            {% if g.ownedprojects and g.projects_involved_in %}
+                                <div class="dropdown-divider"></div>
+                            {% endif %}
+
+                            {% if g.projects_involved_in %}
+                                <span class="dropdown-header" disabled>Projects You Are A part Of</span>
+                                {% for project in g.projects_involved_in %}
+                                    <a href="{{url_for('projects.view_project', projectID=project['ProjectID'])}}" class="dropdown-item">
+                                        {{project['TeamName']}} - {{project['Project']}}
+                                    </a>
+                                {% endfor %}
+                                
+                            {% endif %}
+                            </div>
+                        </li>
+                        {% endif %}
+
+                    
                     {% endif %}
 
 
@@ -76,11 +112,11 @@
 
             </header>
             {% block errors %}
-            {% for message in get_flashed_messages() %}
-            <div class="flash">
-                {{ message }}
-            </div>
-            {% endfor %}
+                {% for message in get_flashed_messages() %}
+                <div class="flash">
+                    {{ message }}
+                </div>
+                {% endfor %}
             {% endblock %}
 
             {% block content %}
@@ -98,6 +134,14 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                 integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
                 crossorigin="anonymous"></script>
+
+        <script>
+            $(function(){
+                $('input[type="text"]').change(function(){
+                    this.value = $.trim(this.value);
+                });
+            });
+        </script>
     </body>
 
 </html>

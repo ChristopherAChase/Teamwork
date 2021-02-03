@@ -1,0 +1,22 @@
+<div class="modal fade center" id="createTaskModal" tabindex="-1" role="form" aria-labelledby="DeleteProjectModel"
+     aria-hidden="true">
+    <div class="modal-dialog" id="createTaskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-center" id="createTaskModal">
+                    Create Task
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{url_for('tasks.create_task', projectID=project['ProjectID'])}}">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="task" id="task" placeholder="Task" aria-label="task" aria-describedby="basic-addon2" required>
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit"><i class="fa fa-plus-square-o"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

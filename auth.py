@@ -94,6 +94,10 @@ def load_logged_in_user():
     else:
         g.user = get_db().execute(q.get_user_userID, (userID,)).fetchone()
         g.teams = get_db().execute(q.get_users_teams_userID, (userID, )).fetchall()
+        g.ownedprojects = get_db().execute(
+            q.get_user_owned_projects, (userID, )).fetchall()
+        g.projects_involved_in = get_db().execute(
+            q.get_user_involved_projects, (userID,)).fetchall()
 
 
 def login_required(view):

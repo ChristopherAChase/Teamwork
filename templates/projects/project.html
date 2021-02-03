@@ -5,6 +5,8 @@
 {% block header %}{{project['Project']}} - Overview {% endblock %}
 
 {% block content %}
+
+
 <div class="row d-flex justify-content-between">
     <p class="col-auto">
         {{project['Description']}}
@@ -50,17 +52,29 @@
         <div class="d-flex justify-content-between">
             <h2>Project Task Items</h2>
             <p>
-                {% if g.user['UserID'] == project['OwnerID'] %}
-                <a href="#">
+                {% if g.user['UserID'] in projectMembers[0] %}
+                <a href="#" data-toggle="modal" data-target="#createTaskModal">
                     <i class="fa fa-plus-square-o"></i> Create New Tasks
                 </a>
                 {% endif %}
             </p>
         </div>
 
+        <ul class="list-group list-group-flush">
+            {% for task in taskList %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>
+                    {{task['Task']}} 
+                </span>
+                
+            </li>
+            {% endfor %}
+        </ul>
+
     </div>
 </div>
 
 
-{% include 'projects/includes/delete.html' %}
+{% include 'projects/_delete.html' %}
+{% include 'tasks/_create.html' %}
 {% endblock %}

@@ -4,7 +4,7 @@ class queries:
             Teams.TeamID,
             Teams.Name,
             Teams.Description,
-            Users.Username
+            Users.Username AS TeamOwner
         FROM Teams
         INNER JOIN UserTeams ON Teams.TeamID = UserTeams.TeamID
         INNER JOIN Users ON Users.UserID = Teams.OwnerID
@@ -64,6 +64,30 @@ class queries:
         WHERE ProjectID = ?
         '''
 
+    get_user_owned_projects = '''
+        SELECT
+            p.ProjectiD,
+            p.Project,
+            t.Name AS TeamName
+        FROM Projects AS p
+        INNER JOIN Teams AS t on t.TeamID = p.TeamID
+        WHERE t.OwnerID = ?
+        ORDER BY p.Project, p.ProjectID
+    '''
+
+    get_user_involved_projects = '''
+        SELECT
+            p.ProjectID,
+            p.Project,
+            t.Name AS TeamName
+        FROM Projects AS p
+            INNER JOIN projectUsers AS pu ON pu.ProjectiD = p.ProjectID
+            INNER JOIN Teams AS t ON t.TeamID = p.TeamID
+        WHERE pu.userID = ?
+        AND pu.userID <> t.ownerID
+        ORDER BY p.Project, p.ProjectID
+        '''
+
     get_projectMemberDetails_projectID = '''
         SELECT
             u.UserID,
@@ -99,6 +123,8 @@ class queries:
         OR Teams.Name LIKE ?
         '''
 
+    get_project_tasks = '''SELECT * FROM Tasks WHERE ProjectID = ? ORDER BY CreatedOn DESC'''
+
     check_teams = 'SELECT * FROM Teams WHERE Name = ? and OwnerID = ?'
 
     check_user_on_team = '''
@@ -132,6 +158,18 @@ class queries:
         INSERT OR IGNORE INTO ProjectUsers
             (ProjectID, UserID)
         VALUES(?, ?)'''
+
+    add_task = '''
+        INSERT INTO Tasks
+            (Task, CreatedBy, ProjectID)
+        VALUES(?, ?, ?)
+        '''
+
+    add_taskhistory = '''
+        INSERT INTO TaskHistory
+            (TaskID, ChangeType, ChangedBy, OldText, NewText)
+        VALUES (?, ?, ?, ?, ?)
+        '''
 
     delete_project = '''
         DELETE FROM Projects

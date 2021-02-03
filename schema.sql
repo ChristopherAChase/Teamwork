@@ -74,7 +74,7 @@ CREATE TABLE TaskHistory (
     ModifiedDate    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ChangeType      TEXT        NOT NULL,
     ChangedBy       INTEGER     NOT NULL,
-    OldText         TEXT        NOT NULL,
+    OldText         TEXT        NULL,
     NewText         TEXT        NOT NULL,
     FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
     FOREIGN KEY (ChangedBy) REFERENCES Users (UserID),
