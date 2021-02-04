@@ -61,20 +61,55 @@
         </div>
 
         <ul class="list-group list-group-flush">
-            {% for task in taskList %}
-            <li class="list-group-item d-flex justify-content-between">
-                <span>
-                    {{task['Task']}}
-                </span>
+            <div id="accordion">
+                {% for task in taskList %}
+                <li class="list-group-item d-flex justify-content-between border-bottom-0" id="heading{{task['TaskID']}}" data-toggle="collapse"
+                data-target="#collapse{{task['TaskID']}}" aria-expanded="false" aria-controls="collapse{{task['TaskID']}}">
+                    
+                    <span class="col-auto">
+                        {{task['Task']}}
+                    </span>
+                    {% if task['IsCompleted'] == 1 %}
+                        <i class="fa fa-check-square mr-3 align-self-center"></i>
+                    
+                    {% endif %} 
+    
+                </li>
+                <div id="collapse{{task['TaskID']}}" class="collapse border-bottom"
+                aria-labelledby="heading{{task['TaskID']}}" data-parent="#accordion">
+                    <div class="row d-flex justify-content-around pb-2 pt-0 m-0">
+                        
+                            <a href="#" class="modal-trigger" data-toggle="modal" data-target="#taskHistoryModal">
+                                <i class="fa fa-history"></i>
+                            </a>
+                            <a href="#" class="modal-trigger" data-toggle="modal" data-target="#taskCommentsModal">
+                                <i class="fa fa-comments-o"></i>
+                            </a>
+                            <a href="#" class="modal-trigger" data-toggle="modal" data-target="#EditTaskModal">
+                                <i class="fa fa-edit"></i>
+                            </a>
 
-            </li>
-            {% endfor %}
+                            {% if task['IsCompleted'] == 0 %}
+                                <a href="#DeleteTaskModal" class="modal-trigger" data-toggle="modal" data-target="#completeTaskModal" data-id="{{task['TaskID']}}" data-objecttype="task">
+                                    <i class="fa fa-check-square-o"></i>
+                                </a>
+                            {% endif %} 
+                            {% if g.user['UserID'] == project['OwnerID'] %}
+                            <a href="#" class="modal-trigger" data-toggle="modal" data-target="#DeleteTaskModal">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                            
+                            {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </ul>
-
     </div>
 </div>
 
 
 {% include 'projects/_delete.html' %}
 {% include 'tasks/_create.html' %}
+{% include 'tasks/_delete.html' %}
 {% endblock %}

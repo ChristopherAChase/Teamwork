@@ -42,8 +42,14 @@ def create_task(projectID):
 
 
 @login_required
-@bp.route('/delete/<int:taskID>', methods=('GET', 'POST'))
-def delete_task(taskID):
+@bp.route('/delete', methods=('GET', 'POST'))
+def delete_task():
+    taskID = request.form.get('taskIDinput')
+    return f'TaskID: "{taskID}"'
+    projectID = get_db().execute(
+        'SELECT ProjectID FROM Tasks WHERE TaskID = ?', (taskID,)).fetchone()[0]
+
+    # redirect(url_for('projects.view_project', projectID=projectID))
     pass
 
 
@@ -68,5 +74,7 @@ def load_logged_in_user():
     else:
         g.user = get_db().execute(q.get_user_userID, (userID,)).fetchone()
         g.teams = get_db().execute(q.get_users_teams_userID, (userID, )).fetchall()
-        g.ownedprojects = get_db().execute(q.get_user_owned_projects, (userID, )).fetchall()
-        g.projects_involved_in = get_db().execute(q.get_user_involved_projects, (userID,)).fetchall()
+        g.ownedprojects = get_db().execute(
+            q.get_user_owned_projects, (userID, )).fetchall()
+        g.projects_involved_in = get_db().execute(
+            q.get_user_involved_projects, (userID,)).fetchall()

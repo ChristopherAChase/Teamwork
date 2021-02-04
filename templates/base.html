@@ -137,15 +137,30 @@
                 crossorigin="anonymous"></script>
 
         <script>
+
             $(function () {
                 $('input[type="text"]').change(function () {
                     this.value = $.trim(this.value);
                 });
+
+                
+
+                $('.modal').on('shown.bs.modal', function (e){
+                    let modalToggle = $(e.relatedTarget);
+                    let id = modalToggle.data('id');
+                    
+                    let input = $('#taskIDinput');
+
+                    input.val(id);
+                });
             });
 
             $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+
+            
+
         </script>
     </body>
 
