@@ -142,24 +142,39 @@
                 $('input[type="text"]').change(function () {
                     this.value = $.trim(this.value);
                 });
+            });
 
-                
+            $(function () {
+                $('.modal').on('shown.bs.modal', function (e) {
 
-                $('.modal').on('shown.bs.modal', function (e){
                     let modalToggle = $(e.relatedTarget);
-                    let id = modalToggle.data('id');
-                    
-                    let input = $('#taskIDinput');
+                    let id = modalToggle.attr('data-id');
+                    let target = modalToggle.attr('data-target')
+                    let text = modalToggle.attr('data-text')
 
+                    let input = $(target).find('input[type=hidden]');
+                    let textDisplay = $(target).find('p.textOutput');
+
+
+                    textDisplay.text(text);
                     input.val(id);
                 });
+
+                $('.modal').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').trigger('reset');
+                });
+
             });
 
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip();
             });
 
-            
+            $(document).ready(function () {
+                $(".modal-body").find('form').trigger('reset');
+            })
+
+
 
         </script>
     </body>

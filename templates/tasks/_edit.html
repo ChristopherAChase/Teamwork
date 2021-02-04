@@ -1,0 +1,35 @@
+<div class="modal fade center" id="EditTaskModal" tabindex="-1" role="form" aria-labelledby="EditTaskModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-inline-block">
+                <h3 class="modal-title text-center">
+                    Modify Task
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{url_for('tasks.edit_task')}}" class="modal-form">
+                    <p>Current Task Text:</p>
+                    <p class="textOutput text-center"></p>
+
+                    <div class="form-row">
+                        <input type="text" name="newTaskText" id="newTaskText" class="form-control"
+                               placeholder="Enter tasks new text...">
+                    </div>
+                    <div class="form-row d-flex justify-content-end mt-3">
+                        <input type="hidden" name="taskIDinput" id="taskIDinput" value="" />
+
+                        <div class="col-6 d-flex justify-content-around">
+                            <button type="submit" class="btn btn-outline-primary">
+                                Submit
+                            </button>
+                            <button class="btn btn-outline-primary " data-dismiss="modal" aria-label="Close">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

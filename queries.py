@@ -125,6 +125,8 @@ class queries:
 
     get_project_tasks = '''SELECT * FROM Tasks WHERE ProjectID = ? ORDER BY CreatedOn '''
 
+    get_task_info = '''SELECT * FROM Tasks WHERE TaskID = ?'''
+
     check_teams = 'SELECT * FROM Teams WHERE Name = ? and OwnerID = ?'
 
     check_user_on_team = '''
@@ -163,6 +165,12 @@ class queries:
         INSERT INTO Tasks
             (Task, CreatedBy, ProjectID)
         VALUES(?, ?, ?)
+        '''
+
+    toggle_task_completion_ID = '''
+        UPDATE TASKS
+        SET IsCompleted = CASE IsCompleted WHEN 1 THEN 0 ELSE 1 END
+        WHERE TaskID = ?
         '''
 
     add_taskhistory = '''

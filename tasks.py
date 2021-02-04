@@ -1,10 +1,12 @@
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from Teamwork.auth import login_required
-from Teamwork.db import get_db
-from Teamwork.queries import queries as q
+from .auth import login_required
+from .db import get_db
+from .queries import queries as q
 import sqlite3
+import logging
+
 
 bp = Blueprint('tasks', __name__, url_prefix='/task')
 
@@ -54,15 +56,52 @@ def delete_task():
 
 
 @login_required
-@bp.route('/edit/<int:taskID>', methods=('GET', 'POST'))
-def edit_task(taskID):
-    pass
+@bp.route('/edit/', methods=('GET', 'POST'))
+def edit_task():
+    taskID = request.form.get('taskIDinput')
+    new_task_text = request.form.get('newTaskText')
+
+    return f'TaskID: {taskID}    New Text: {new_task_text}'
+
 
 
 @login_required
 @bp.route('/<int:taskID>', methods=('GET', 'POST'))
 def view_task(taskID):
     pass
+
+
+@login_required
+@bp.route('complete/<int:taskID>', methods=('GET', 'POST'))
+def complete_task(taskID):
+    db = get_db()
+
+    task = db.execute(q.get_task_info, (taskID,)).fetchone()
+
+    task_text = task['Task']
+    taskEvent = 'A' if task['IsCompleted'] else 'C'
+
+    cur = db.cursor()
+    with db:
+
+        try:
+            cur.execute(q.toggle_task_completion_ID, (taskID,))
+
+            cur.execute(q.add_taskhistory, (taskID, taskEvent,
+                                            g.user['UserID'], task_text, task_text,))
+
+            cur.close()
+            db.commit()
+        except sqlite3.Error as e:
+            if db:
+                db.rollback()
+            logging.warn(e)
+
+        finally:
+            if cur:
+                cur.close()
+
+    return redirect(url_for('projects.view_project', projectID=task['ProjectID']))
 
 
 @bp.before_app_request
