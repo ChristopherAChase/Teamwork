@@ -184,6 +184,11 @@ class queries:
         WHERE ProjectID = ?
         '''
 
+    delete_task = '''
+        DELETE FROM Tasks
+        WHERE TaskID = ?
+        '''
+
     clear_projectUsers = '''
         DELETE FROM ProjectUsers
         WHERE ProjectID = ?'''
@@ -193,3 +198,9 @@ class queries:
         SET Project = ?,
             Description = ?
         WHERE ProjectID = ?'''
+
+    update_task = '''
+        UPDATE Tasks
+        SET Task = ?
+        WHERE TaskID = ?
+        '''

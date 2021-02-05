@@ -46,23 +46,38 @@ def create_task(projectID):
 @login_required
 @bp.route('/delete', methods=('GET', 'POST'))
 def delete_task():
+    db = get_db()
     taskID = request.form.get('taskIDinput')
-    return f'TaskID: "{taskID}"'
-    projectID = get_db().execute(
-        'SELECT ProjectID FROM Tasks WHERE TaskID = ?', (taskID,)).fetchone()[0]
+    task = db.execute(q.get_task_info, (taskID, )).fetchone()
+    projectID = task['ProjectID']
 
-    # redirect(url_for('projects.view_project', projectID=projectID))
-    pass
+    db.execute(q.delete_task, (taskID,))
+    db.commit()
+
+    db.execute(q.add_taskhistory, (taskID, 'D',
+                                   g.user['UserID'], task['Task'], task['Task']))
+    db.commit()
+
+    return redirect(url_for('projects.view_project', projectID=projectID))
 
 
 @login_required
 @bp.route('/edit/', methods=('GET', 'POST'))
 def edit_task():
+    db = get_db()
     taskID = request.form.get('taskIDinput')
     new_task_text = request.form.get('newTaskText')
+    task = db.execute(q.get_task_info, (taskID, )).fetchone()
+    projectID = task['ProjectID']
 
-    return f'TaskID: {taskID}    New Text: {new_task_text}'
+    db.execute(q.update_task, (new_task_text, taskID))
+    db.commit()
 
+    db.execute(q.add_taskhistory, (taskID, 'M',
+                                   g.user['UserID'], task['Task'], new_task_text,))
+    db.commit()
+
+    return redirect(url_for('projects.view_project', projectID=projectID))
 
 
 @login_required
