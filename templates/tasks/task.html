@@ -1,7 +1,62 @@
+{% set change_types = {
+    'A' : 'Created/Uncompleted',
+    'C' : 'Completed',
+    'D' : 'Deleted',
+    'M' : 'Modified'
+} %}
+
 {% extends 'base.html' %}
 
 {% block title %}{% endblock %}
 
-{% block header %}{% endblock %}
+{% block header %}Task Details{% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+    <div class="row d-flex justify-content-around">
+        <p class="text-center col-11">
+            {{task['Task']}}
+        </p>
+        <div class="auto">
+            <a href="{{url_for('projects.view_project', projectID=task['ProjectID'])}}" >
+                <i class="fa fa-angle-double-left"></i> Project
+            </a>
+        </div>
+    </div>
+
+    <d class="row">
+        <div class="col-6 text-center">
+            <h2>Task History</h2>
+
+            <ul class="list-group list-group-flush">
+                {% for event in task_history %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{change_types[event['ChangeType']]}} @ {{event['ModifiedDate']}} by {{event['UserName']}}
+                    </li>
+                {% endfor %}
+                
+                
+            </ul>
+        </div>
+
+        <div class="col-6 text-center">
+            <div class="d-flex justify-content-between">
+                <h2 >Task Comments</h2>
+                <h3>
+                    <a href="#" data-toggle="modal" data-target="#addCommentModal" class="align-self-center">
+                        <i class="fa fa-plus-square-o"></i>
+                    </a>
+                </h3>
+            </div>
+
+
+            <ul class="list-group list-group-flush">
+                {% if not comments %}
+                    <li class="list-group-item text-center">
+                        There are no comments on this task - be the first!
+                    </li>
+                {% endif %}
+                
+            </ul>
+        </div>
+    </d>
+{% endblock %}

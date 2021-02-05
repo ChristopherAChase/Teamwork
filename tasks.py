@@ -83,6 +83,17 @@ def edit_task():
 @login_required
 @bp.route('/<int:taskID>', methods=('GET', 'POST'))
 def view_task(taskID):
+    db = get_db()
+    task = db.execute(q.get_task_info, (taskID,)).fetchone()
+    task_history = db.execute(q.get_task_history, (taskID,)).fetchall()
+    comments = db.execute(q.get_task_comments, (taskID,)).fetchall()
+    current_user = g.user['UserID']
+
+    return render_template('tasks/task.html',
+                           task=task,
+                           task_history=task_history,
+                           comments=comments,
+                           current_user=current_user)
     pass
 
 

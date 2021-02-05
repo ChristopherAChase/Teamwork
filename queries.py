@@ -127,6 +127,37 @@ class queries:
 
     get_task_info = '''SELECT * FROM Tasks WHERE TaskID = ?'''
 
+    get_task_history = '''
+        SELECT
+            th.TaskID,
+            th.ModifiedDate,
+            th.ChangeType,
+            th.OldText,
+            th.NewText,
+            u.UserID,
+            u.UserName,
+            u.FirstName,
+            u.LastName
+        FROM TaskHistory AS th
+            INNER JOIN Users AS u ON u.UserID = th.ChangedBy
+        WHERE TaskID = ?
+        ORDER BY ModifiedDate DESC'''
+
+    get_task_comments = '''
+        SELECT
+            c.CommentID,
+            c.CommentText,
+            c.CommentedBy,
+            c.CreatedOn,
+            u.UserName,
+            u.FirstName,
+            u.LastName
+        FROM Comments AS c
+            INNER JOIN Users AS u ON u.UserID = c.CommentedBy
+        WHERE TaskID = ?
+        ORDER BY CreatedOn DESC
+        '''
+
     check_teams = 'SELECT * FROM Teams WHERE Name = ? and OwnerID = ?'
 
     check_user_on_team = '''

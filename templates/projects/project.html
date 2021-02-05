@@ -89,8 +89,8 @@
                         <a href="#" class="modal-trigger" data-toggle="modal" data-target="#taskHistoryModal">
                             <i class="fa fa-history"></i>
                         </a>
-                        <a href="#" class="modal-trigger" data-toggle="modal" data-target="#taskCommentsModal">
-                            <i class="fa fa-comments-o"></i>
+                        <a href="{{url_for('tasks.view_task', taskID=task['TaskID'])}}" >
+                            <i class="fa fa-info-circle"></i>
                         </a>
                         <a href="#" class="modal-trigger" data-toggle="modal" data-target="#EditTaskModal"
                            data-id="{{task['TaskID']}}" data-text="{{task['Task']}}">
