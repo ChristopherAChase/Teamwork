@@ -4,6 +4,9 @@
 
 {% block header %}{{action}} Project{% endblock %}
 
+
+
+
 {% block content %}
 
 <form method="post">
@@ -35,9 +38,12 @@
     <div class="form-check">
       <input type="checkbox" name="projectMembers" id="teamMember{{user['UserID']}}" value="{{user['UserID']}}"
              class="form-check-input"
-             {% if user['UserID'] in projectMembers[0] %}
-             checked
-             {% endif %}>
+            {% for member in projectMembers %}
+              {% if user['UserID'] == member['UserID'] %}
+                checked
+              {% endif %}
+            {% endfor %}
+            >
       <label for="teamMember{{user['UserID']}}" class="form-check-label">
         {{user['UserName']}}
       </label>

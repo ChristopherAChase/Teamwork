@@ -1,0 +1,25 @@
+<div class="modal fade center" id="TaskCommentModal" tabindex="-1" role="form" aria-labelledby="TaskCommentModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-inline-block">
+                <h3 class="modal-title text-center">
+                    Add Comment
+                </h3>
+            </div>
+            <div class="modal-body">
+                <!-- There is a bug with the action attribute... on submit it is ignoring the action attribute and sending 
+                        a post request to the current page of .../task/1 instead if the flask view function of tasks.add_comment.
+                        no time to investigate now...-->
+                <form method="POST" action="{{ url_for('tasks.add_comment', taskID=task['TaskID']) }}">
+                    <div class="form-row">
+                        <textarea rows="5" maxlength="350" name="commentText" id="commentText" class="form-control"
+                            placeholder="Enter your comment here..."
+                            style="resize: none;" required></textarea>
+                        <button class="btn btn-primary mt-3" type="submit">Submit Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

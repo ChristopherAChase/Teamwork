@@ -79,6 +79,5 @@ CREATE TABLE TaskHistory (
     FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID),
     FOREIGN KEY (ChangedBy) REFERENCES Users (UserID),
     PRIMARY KEY (TaskID, ModifiedDate),
-    CHECK(ChangeType IN ('A', 'C', 'D', 'M'))
+    CHECK(ChangeType IN ('A', 'C', 'U', 'D', 'M'))
 );
-

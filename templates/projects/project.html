@@ -80,15 +80,10 @@
                         {% endif %}
                     </a>
 
-
                 </li>
                 <div id="collapse{{task['TaskID']}}" class="collapse border-bottom"
                      aria-labelledby="heading{{task['TaskID']}}" data-parent="#accordion">
                     <div class="row d-flex justify-content-around pb-2 pt-0 m-0">
-
-                        <a href="#" class="modal-trigger" data-toggle="modal" data-target="#taskHistoryModal">
-                            <i class="fa fa-history"></i>
-                        </a>
                         <a href="{{url_for('tasks.view_task', taskID=task['TaskID'])}}" >
                             <i class="fa fa-info-circle"></i>
                         </a>

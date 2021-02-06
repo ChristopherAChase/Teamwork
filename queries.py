@@ -20,8 +20,10 @@ class queries:
         SELECT
             Teams.TeamID,
             Teams.Name,
-            Teams.Description
+            Teams.Description,
+            Owner.UserName
         FROM Teams
+            INNER JOIN Users AS Owner ON Owner.UserID = Teams.OwnerID
         WHERE Teams.TeamID = ?
         '''
 
@@ -195,6 +197,12 @@ class queries:
     add_task = '''
         INSERT INTO Tasks
             (Task, CreatedBy, ProjectID)
+        VALUES(?, ?, ?)
+        '''
+
+    add_task_comment = '''
+        INSERT INTO Comments
+            (CommentText, CommentedBy, TaskID)
         VALUES(?, ?, ?)
         '''
 

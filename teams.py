@@ -9,8 +9,8 @@ from Teamwork.queries import queries as q
 bp = Blueprint('teams', __name__, url_prefix='/teams')
 
 
-@login_required
 @bp.route('/overview', methods=('GET', 'POST',))
+@login_required
 def overview():
     if request.method == 'GET':
 
@@ -26,14 +26,14 @@ def overview():
         return render_template('teams/overview.html', teams=teams)
 
 
-@login_required
 @bp.route('/noteams', methods=('GET', 'POST',))
+@login_required
 def noteams():
     return render_template('teams/noteams.html')
 
 
-@login_required
 @bp.route('/createteam', methods=('GET', 'POST',))
+@login_required
 def createteam():
     if request.method == 'GET':
         return render_template('teams/createteam.html')
@@ -76,6 +76,7 @@ def createteam():
 
 
 @bp.route('/findteam', methods=('GET', 'POST',))
+@login_required
 def findteam():
     if request.method == 'GET':
         return render_template('teams/findteam.html')
@@ -95,6 +96,7 @@ def findteam():
 
 
 @bp.route('/joinTeam/<int:teamID>', methods=('GET', 'POST',))
+@login_required
 def jointeam(teamID):
     db = get_db()
     db.execute(q.add_userTeam, (g.user['UserID'], teamID,))
@@ -103,6 +105,7 @@ def jointeam(teamID):
 
 
 @bp.route('<int:teamID>', methods=('GET', 'POST'))
+@login_required
 def team(teamID):
     team = get_db().execute(q.get_team_info, (teamID,)).fetchone()
     teamMembers = get_db().execute(q.get_team_members_teamID, (teamID,)).fetchall()
@@ -129,5 +132,7 @@ def load_logged_in_user():
     else:
         g.user = get_db().execute(q.get_user_userID, (userID,)).fetchone()
         g.teams = get_db().execute(q.get_users_teams_userID, (userID, )).fetchall()
-        g.ownedprojects = get_db().execute(q.get_user_owned_projects, (userID, )).fetchall()
-        g.projects_involved_in = get_db().execute(q.get_user_involved_projects, (userID,)).fetchall()
+        g.ownedprojects = get_db().execute(
+            q.get_user_owned_projects, (userID, )).fetchall()
+        g.projects_involved_in = get_db().execute(
+            q.get_user_involved_projects, (userID,)).fetchall()

@@ -1,8 +1,9 @@
 {% set change_types = {
-    'A' : 'Created/Uncompleted',
+    'A' : 'Created',
     'C' : 'Completed',
     'D' : 'Deleted',
-    'M' : 'Modified'
+    'M' : 'Modified',
+    'U' : 'Uncompleted'
 } %}
 
 {% extends 'base.html' %}
@@ -23,40 +24,71 @@
         </div>
     </div>
 
-    <d class="row">
+    <div class="row">
         <div class="col-6 text-center">
             <h2>Task History</h2>
-
             <ul class="list-group list-group-flush">
-                {% for event in task_history %}
-                    <li class="list-group-item d-flex justify-content-between">
-                        {{change_types[event['ChangeType']]}} @ {{event['ModifiedDate']}} by {{event['UserName']}}
-                    </li>
-                {% endfor %}
-                
-                
+                    {% for event in task_history %}
+                        {% if event['ChangeType'] == 'M' %}
+                        <div id="accordion">
+                            <li class="list-group-item position-relative" id="heading{{loop.index0}}" 
+                            data-toggle="collapse" data-target="#collapse{{loop.index0}}" 
+                            aria-expanded="false" aria-controls="collapse{{loop.index0}}">
+                                <span class="col-auto">
+                                    {{change_types[event['ChangeType']]}} @ {{event['ModifiedDate']}} by {{event['UserName']}}
+                                </span>
+                                <span class="d-inline-block position-absolute h3" style="right: 1em; bottom: 0;">...</span>
+
+                            </li>
+                            <div id="collapse{{loop.index0}}" class="collapse border-bottom" 
+                                aria-labelledby="heading{{loop.index0}}" data-parent="#accordion">
+                                <div>
+                                    <p><s>{{- event['OldText'] -}}</s></p>
+                                    <p>{{- event['NewText'] -}}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <li class="list-group-item">
+                                <p>
+                                    {{change_types[event['ChangeType']]}} @ {{event['ModifiedDate']}} by {{event['UserName']}}
+                                </p>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </ul>
         </div>
 
         <div class="col-6 text-center">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-around">
                 <h2 >Task Comments</h2>
                 <h3>
-                    <a href="#" data-toggle="modal" data-target="#addCommentModal" class="align-self-center">
+                    <a href="#" data-toggle="modal" data-target="#TaskCommentModal" class="align-self-center">
                         <i class="fa fa-plus-square-o"></i>
                     </a>
                 </h3>
             </div>
-
-
-            <ul class="list-group list-group-flush">
+            <ul class="list-group list-group-flush ">
                 {% if not comments %}
                     <li class="list-group-item text-center">
                         There are no comments on this task - be the first!
                     </li>
                 {% endif %}
+                {% for comment in comments %}
+                    <li class="list-group-item border-bottom pb-0">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{{comment['UserName']}}</span>
+                            <span>{{comment['CreatedOn']}}</span>
+                        </div>
+                        <p class="text-left">
+                            {{comment['CommentText']}}
+                        </p>
+                    </li>
+                {% endfor %}
                 
             </ul>
         </div>
-    </d>
+    </div>
+
+{% include 'tasks/_comment.html' %}
 {% endblock %}

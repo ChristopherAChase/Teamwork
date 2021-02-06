@@ -11,8 +11,8 @@ import logging
 bp = Blueprint('projects', __name__, url_prefix='/projects')
 
 
-@login_required
 @bp.route('/createproject/<int:teamID>', methods=('GET', 'POST',))
+@login_required
 def create_project(teamID):
     teamMembers = get_db().execute(q.get_team_members_teamID, (teamID,)).fetchall()
 
@@ -46,18 +46,21 @@ def create_project(teamID):
     pass
 
 
-@login_required
 @bp.route('/editproject/<int:projectID>', methods=('GET', 'POST',))
+@login_required
 def edit_project(projectID):
     db = get_db()
     project = db.execute(q.get_project_projectID, (projectID, )).fetchone()
     teamID = project['TeamID']
-    projectMembers = db.execute(
-        q.get_projectMembers_projectID, (projectID,)).fetchall()
+    # projectMembers = db.execute(
+    #     q.get_projectMembers_projectID, (projectID,)).fetchall()
     teamMembers = db.execute(
         q.get_team_members_teamID, (teamID,)).fetchall()
 
     if request.method == 'GET':
+        projectMembers = db.execute(
+            q.get_projectMembers_projectID, (projectID,)).fetchall()
+
         return render_template('projects/manageproject.html', action='Edit',
                                project=project, projectMembers=projectMembers, teamMembers=teamMembers)
     elif request.method == 'POST':
@@ -78,8 +81,8 @@ def edit_project(projectID):
         return redirect(url_for('projects.view_project', projectID=projectID))
 
 
-@login_required
 @bp.route('/deleteproject/<int:projectID>', methods=('GET', 'POST',))
+@login_required
 def delete_project(projectID):
     db = get_db()
 
@@ -96,8 +99,8 @@ def delete_project(projectID):
         return redirect(url_for('teams.team', teamID=teamID))
 
 
-@login_required
 @bp.route('/viewproject/<int:projectID>', methods=('GET', 'POST',))
+@login_required
 def view_project(projectID):
     db = get_db()
     project = db.execute(q.get_project_projectID, (projectID,)).fetchone()

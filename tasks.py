@@ -11,8 +11,8 @@ import logging
 bp = Blueprint('tasks', __name__, url_prefix='/task')
 
 
-@login_required
 @bp.route('/create/<int:projectID>', methods=('GET', 'POST'))
+@login_required
 def create_task(projectID):
     db = get_db()
 
@@ -43,8 +43,8 @@ def create_task(projectID):
     return redirect(url_for('projects.view_project', projectID=projectID))
 
 
-@login_required
 @bp.route('/delete', methods=('GET', 'POST'))
+@login_required
 def delete_task():
     db = get_db()
     taskID = request.form.get('taskIDinput')
@@ -61,8 +61,8 @@ def delete_task():
     return redirect(url_for('projects.view_project', projectID=projectID))
 
 
-@login_required
 @bp.route('/edit/', methods=('GET', 'POST'))
+@login_required
 def edit_task():
     db = get_db()
     taskID = request.form.get('taskIDinput')
@@ -80,32 +80,52 @@ def edit_task():
     return redirect(url_for('projects.view_project', projectID=projectID))
 
 
-@login_required
 @bp.route('/<int:taskID>', methods=('GET', 'POST'))
+@login_required
 def view_task(taskID):
     db = get_db()
-    task = db.execute(q.get_task_info, (taskID,)).fetchone()
-    task_history = db.execute(q.get_task_history, (taskID,)).fetchall()
-    comments = db.execute(q.get_task_comments, (taskID,)).fetchall()
     current_user = g.user['UserID']
 
-    return render_template('tasks/task.html',
-                           task=task,
-                           task_history=task_history,
-                           comments=comments,
-                           current_user=current_user)
-    pass
+    if request.method == 'GET':
+        task = db.execute(q.get_task_info, (taskID,)).fetchone()
+        task_history = db.execute(q.get_task_history, (taskID,)).fetchall()
+        comments = db.execute(q.get_task_comments, (taskID,)).fetchall()
+
+        return render_template('tasks/task.html',
+                               task=task,
+                               task_history=task_history,
+                               comments=comments,
+                               current_user=current_user)
+    if request.method == 'POST':
+        comment = request.form.get('commentText')
+        db.execute(q.add_task_comment, (comment, current_user, taskID,))
+        db.commit()
+
+        return redirect(url_for('tasks.view_task', taskID=taskID,))
 
 
+@bp.route('/<int:taskID>', methods=('GET', 'POST'))
 @login_required
+def add_comment(taskID):
+    db = get_db()
+    comment = request.form.get('commentText')
+    current_user = g.user['UserID']
+
+    db.execute(q.add_task_comment, (comment, current_user, taskID,))
+    db.commit()
+
+    return redirect(url_for('tasks.view_task', taskID=taskID,))
+
+
 @bp.route('complete/<int:taskID>', methods=('GET', 'POST'))
+@login_required
 def complete_task(taskID):
     db = get_db()
 
     task = db.execute(q.get_task_info, (taskID,)).fetchone()
 
     task_text = task['Task']
-    taskEvent = 'A' if task['IsCompleted'] else 'C'
+    taskEvent = 'U' if task['IsCompleted'] else 'C'
 
     cur = db.cursor()
     with db:
